@@ -4,6 +4,7 @@ import Auth from './Auth';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(true);
+
   return (
     <div className='app-container'>
       {!isLogin && <Auth />}

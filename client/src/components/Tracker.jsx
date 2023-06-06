@@ -1,8 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AddModal from './AddModal';
+import axios from 'axios';
 
 const Tracker = ({ setIsLogin }) => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    axios.get('api/problems/titles')
+      .then((response) => {
+        let problemsOptions = response.data.map((item) => { return { value: item._id, label: item.title } });
+        setData(problemsOptions);
+      })
+      .catch(err => console.log('Err in get problems options: ', err));
+  }, []);
   return (
     <div className='tracker-container'>
       <div className='tracker-header'>
@@ -13,7 +23,7 @@ const Tracker = ({ setIsLogin }) => {
         <button onClick={() => setShowAddModal(true)}>Add</button>
         <button>filter</button>
       </div>
-      {showAddModal && <AddModal setShow={setShowAddModal}/>}
+      {showAddModal && data && <AddModal setShow={setShowAddModal} datas={data} />}
     </div>
   )
 }
