@@ -1,2 +1,2 @@
-# MVP-tracker-app
-A leetcode tracker app
+# tracker-app
+A tracker app
