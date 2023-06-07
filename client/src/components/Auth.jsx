@@ -3,7 +3,7 @@ import { useFormik, Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 
 import Box from '@mui/material/Box';
-import { TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel } from '@mui/material';
+import { TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -99,8 +99,12 @@ const Auth = ({ setIsLogin }) => {
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
+            label="Password"
             name='password'
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            type={showPassword ? 'text' : 'password'}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -113,12 +117,12 @@ const Auth = ({ setIsLogin }) => {
                 </IconButton>
               </InputAdornment>
             }
-            label="Password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helpertext={formik.touched.password && formik.errors.password}
           />
+          {formik.touched.password && formik.errors.password && (
+            <Typography variant="caption" color="error">
+              {formik.errors.password}
+            </Typography>
+          )}
         </FormControl>
         <Button variant="contained" color="success" type="submit">{signUp ? 'Sign Up' : 'Sign In'}</Button>
         <Divider>Or sign up with</Divider>

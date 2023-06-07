@@ -49,6 +49,9 @@ button {
 .auth-container > form > button{
   align-self: center;
 }
+.auth-container > div > u {
+  cursor: pointer;
+}
 
 /* Tracker.jsx */
 .tracker-container {
