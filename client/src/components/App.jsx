@@ -7,7 +7,7 @@ const App = () => {
 
   return (
     <div className='app-container'>
-      {!isLogin && <Auth />}
+      {!isLogin && <Auth setIsLogin={setIsLogin} />}
       {isLogin && <Tracker setIsLogin={setIsLogin} />}
     </div>
   )

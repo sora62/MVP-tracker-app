@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import Select from 'react-select';
-import axios from 'axios';
 
-let problemsOptions = [];
 const tagsOptions = [
   { value: 'Array', label: 'Array' },
   { value: 'Backtracking', label: 'Backtracking' },
@@ -40,30 +38,45 @@ const AddModal = ({ setShow, datas }) => {
   const [problem, setProblem] = useState(null);
   const [tags, setTags] = useState([tagsOptions[0], tagsOptions[13]]);
 
-  useEffect(() => {
-    console.log('problem: ', problem)
-    console.log('tags: ', tags)
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const obj = {
+      id: problem.value,
+      tags: tags.map((item) => item.value)
+    }
+    console.log('obj:', obj);
+  };
+
   return (
     <div className='overlay'>
       <div className='add-modal-container'>
         <div className='close-button' onClick={() => setShow(false)}>
           <FontAwesomeIcon icon={faCircleXmark} size="xl" style={{ color: "#ff7a8e" }} />
         </div>
-        <label>Search LeetCode Problem Title:
-          <Select defaultValue={problem} isSearchable={true} onChange={setProblem} options={datas} />
-        </label>
-        <label>Tags:
-          <Select
-            defaultValue={[tagsOptions[0], tagsOptions[13]]}
-            isMulti
-            name="tags"
-            onChange={setTags}
-            options={tagsOptions}
-            className="basic-multi-select"
-          />
-        </label>
-
+        <form className='add-form' onSubmit={handleSubmit}>
+          <label>Search LeetCode Problem By Title:
+            <Select
+              defaultValue={problem}
+              isSearchable={true}
+              onChange={setProblem}
+              options={datas}
+              required={true}
+              className='problem-select'
+            />
+          </label>
+          <label>Tags:
+            <Select
+              defaultValue={[tagsOptions[0], tagsOptions[13]]}
+              isMulti
+              name="tags"
+              onChange={setTags}
+              options={tagsOptions}
+              required={true}
+              className="tags-select"
+            />
+          </label>
+          <button type="submit" className='create-button'>Create</button>
+        </form>
       </div>
     </div>
   )

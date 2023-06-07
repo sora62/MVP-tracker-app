@@ -8,7 +8,7 @@ const Tracker = ({ setIsLogin }) => {
   useEffect(() => {
     axios.get('api/problems/titles')
       .then((response) => {
-        let problemsOptions = response.data.map((item) => { return { value: item._id, label: item.title } });
+        const problemsOptions = response.data.map((item) => { return { value: item._id, label: item.title } });
         setData(problemsOptions);
       })
       .catch(err => console.log('Err in get problems options: ', err));
