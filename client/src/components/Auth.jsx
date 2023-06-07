@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useFormik, Formik, Form, useField } from 'formik';
 import * as Yup from "yup";
 
@@ -11,6 +11,11 @@ import Divider from '@mui/material/Divider';
 const Auth = ({ setIsLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
+
+  useEffect(() => {
+    // Clear the form everytime change signUp state
+    formik.resetForm();
+  }, [signUp]);
 
   const validation = signUp ?
     Yup.object({
@@ -35,6 +40,7 @@ const Auth = ({ setIsLogin }) => {
         .max(128, "Length must be between 8 and 128 characters")
         .required("Required"),
     });
+
   const formik = signUp ?
     useFormik({
       initialValues: {
@@ -61,6 +67,7 @@ const Auth = ({ setIsLogin }) => {
 
   return (
     <div className='auth-container'>
+      <h1>Welcome!</h1>
       <Box
         component="form"
         sx={{ '& .MuiTextField-root': { m: 1, width: '40ch' } }}
@@ -68,15 +75,17 @@ const Auth = ({ setIsLogin }) => {
         onSubmit={formik.handleSubmit}
       >
         {signUp && <TextField
+          required
           id="outlined-required"
           name='name'
           label="Name"
-          value={formik.values.name}
+          value={formik.values.name || ''}
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
         />}
         <TextField
+          required
           id="outlined-email"
           type='email'
           name='email'
@@ -86,7 +95,7 @@ const Auth = ({ setIsLogin }) => {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <FormControl sx={{ m: 1, width: '40ch' }} variant="outlined">
+        <FormControl required sx={{ m: 1, width: '40ch' }} variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
