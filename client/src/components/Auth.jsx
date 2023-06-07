@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useFormik, Formik, Form, useField } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from "yup";
-
 import Box from '@mui/material/Box';
 import { TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import axios from 'axios';
 
-const Auth = ({ setIsLogin }) => {
+const Auth = ({ setIsLogin, setUser }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
 
@@ -19,12 +19,12 @@ const Auth = ({ setIsLogin }) => {
 
   const validation = signUp ?
     Yup.object({
-      name: Yup.string()
+      username: Yup.string()
         .min(2, "Length must be between 2 and 15 characters")
         .max(15, "Length must be between 2 and 15 characters")
         .required("Required"),
       email: Yup.string()
-        .email("Invalid email addresss`")
+        .email("Invalid email addresss")
         .required("Required"),
       password: Yup.string()
         .min(8, "Length must be between 8 and 128 characters")
@@ -33,7 +33,7 @@ const Auth = ({ setIsLogin }) => {
     }) :
     Yup.object({
       email: Yup.string()
-        .email("Invalid email addresss`")
+        .email("Invalid email addresss")
         .required("Required"),
       password: Yup.string()
         .min(8, "Length must be between 8 and 128 characters")
@@ -44,13 +44,24 @@ const Auth = ({ setIsLogin }) => {
   const formik = signUp ?
     useFormik({
       initialValues: {
-        name: '',
+        username: '',
         email: '',
         password: ''
       },
       validationSchema: validation,
-      onSubmit: (values) => {
+      onSubmit: async (values) => {
         console.log('values: ', values);
+        try {
+          const response = await axios.post('/api/register', values);
+          if (response.status === 201) {
+            alert('Sign up successfully!')
+            setSignUp(false);
+          } else {
+            console.log(response.data);
+          }
+        } catch (error) {
+          console.log('Err in sign up: ', error)
+        }
       },
     }) :
     useFormik({
@@ -59,9 +70,19 @@ const Auth = ({ setIsLogin }) => {
         password: ''
       },
       validationSchema: validation,
-      onSubmit: (values) => {
+      onSubmit: async (values) => {
         console.log('values: ', values);
-        setIsLogin(true);
+        try {
+          const response = await axios.post('/api/login', values);
+          if (response.status === 201) {
+            alert('Sign in successfully!');
+            setUser(response.data); // { username: user.username, email: user.email }
+            setIsLogin(true);
+          }
+        } catch (error) {
+          console.log('Err in sign up: ', error)
+          alert(error.response.data);
+        }
       },
     });
 
@@ -77,12 +98,12 @@ const Auth = ({ setIsLogin }) => {
         {signUp && <TextField
           required
           id="outlined-required"
-          name='name'
-          label="Name"
-          value={formik.values.name || ''}
+          name='username'
+          label="Userame"
+          value={formik.values.username || ''}
           onChange={formik.handleChange}
-          error={formik.touched.name && Boolean(formik.errors.name)}
-          helperText={formik.touched.name && formik.errors.name}
+          error={formik.touched.username && Boolean(formik.errors.username)}
+          helperText={formik.touched.username && formik.errors.username}
         />}
         <TextField
           required
