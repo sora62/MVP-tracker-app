@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import Select from 'react-select';
+import axios from 'axios';
 
 const tagsOptions = [
   { value: 'Array', label: 'Array' },
@@ -34,17 +35,27 @@ const tagsOptions = [
   { value: 'Two Pointers', label: 'Two Pointers' },
 ];
 
-const AddModal = ({ setShow, datas }) => {
+const AddModal = ({ setShow, datas, userId }) => {
   const [problem, setProblem] = useState(null);
   const [tags, setTags] = useState([tagsOptions[0], tagsOptions[13]]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const obj = {
-      id: problem.value,
-      tags: tags.map((item) => item.value)
+    const selectedTags = tags.map((item) => item.value);
+    try {
+      const response = await axios.get(`api/problems/${problem.value}`); // problem.value is _id in ProblemsModel
+      const data = response.data; // problem data
+      data['tag'] = selectedTags;
+      axios.post(`/api/users/${userId}/lists`, data)
+        .then(() => {
+          setShow(false);
+        })
+        .catch((err) => {
+          alert(err.response.data);
+        });
+    } catch (error) {
+      console.log('Err in get problem data: ', error)
     }
-    console.log('obj:', obj);
   };
 
   return (
@@ -82,4 +93,4 @@ const AddModal = ({ setShow, datas }) => {
   )
 }
 
-export default AddModal
+export default AddModal;

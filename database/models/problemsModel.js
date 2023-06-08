@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const problemsModel = new mongoose.Schema({
-  listid: { type: Number, required: true, unique: true },
-  questionid: { type: Number, required: true, unique: true },
+  listid: { type: Number, required: true, unique: true, index: true },
+  questionid: { type: Number, required: true, unique: true, index: true },
   title: { type: String, required: true },
   title_slug: { type: String, required: true },
   difficulty: { type: Number, required: true },

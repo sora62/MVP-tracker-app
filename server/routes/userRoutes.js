@@ -11,8 +11,11 @@ router.get('/problems-id/:id', problemsController.getProblemByProblemId);
 router.post('/register', userController.createNewUser);
 router.post('/login', userController.userLogin);
 
-router.get('/users/:id', userDataController.getUserDataById);
-
+router.get('/users/:id', userDataController.getUserDataByUserId);
+router.post('/users/:id/lists', userDataController.addProblemsToLists);
+router.put('/users/:id/lists/delete', userDataController.deleteProblem);
+router.put('/users/:id/lists/checkmark', userDataController.updateCheckmark);
+router.put('/users/:id/lists/note', userDataController.updateNote);
 
 
 module.exports = router;

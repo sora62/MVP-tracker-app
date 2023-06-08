@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: 'Cerebri Sans', sans-serif;
@@ -25,7 +24,7 @@ button {
 }
 
 /* Auth.jsx */
-.auth-container{
+.auth-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -40,16 +39,18 @@ button {
   box-shadow: rgba(0, 0, 0, 0.06) 0 6px 25px, rgba(0, 0, 0, 0.08) 0 0 0 1px;
 }
 
-.auth-container > form{
+.auth-container>form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 20px;
 }
-.auth-container > form > button{
+
+.auth-container>form>button {
   align-self: center;
 }
-.auth-container > div > u {
+
+.auth-container>div>u {
   cursor: pointer;
 }
 
@@ -88,6 +89,7 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 500;
 }
 
 .add-modal-container {
@@ -99,6 +101,7 @@ button {
   padding: 40px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.06) 0 6px 25px, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+  z-index: 900;
 }
 
 .add-form {
@@ -109,9 +112,11 @@ button {
   align-items: center;
   gap: 15px;
 }
-.add-form > label {
+
+.add-form>label {
   width: 100%;
 }
+
 .close-button {
   position: absolute;
   top: 10px;
@@ -121,4 +126,27 @@ button {
 
 .create-button {
   margin-top: 20px;
+}
+
+
+/* Lists.jsx */
+/* .lists-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.list-container {
+  width: 100%;
+  background-color: rgb(231, 247, 255);
+  padding: 10px;
+  border-radius: 10px;
+} */
+
+.delete-icon {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }

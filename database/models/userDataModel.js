@@ -5,13 +5,15 @@ const userDataSchema = new mongoose.Schema({
   description: String,
   lists: [
     {
+      questionid: { type: Number, required: true, unique: true, index: true },
       title: { type: String, required: true },
       link: String,
       checkmark: { type: Boolean, default: false },
       difficulty: { type: String, required: true },
-      tag: { type: String, required: true },
+      tag: [{ type: String, required: true }],
+      date: { type: Date, default: Date.now },
       code: String,
-      note: { type: String },
+      note: String,
     },
   ],
 });

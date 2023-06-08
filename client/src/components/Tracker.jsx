@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import AddModal from './AddModal';
+import Lists from './Lists';
 import axios from 'axios';
 
 const Tracker = ({ user, handleSignOut }) => {
   const [showAddModal, setShowAddModal] = useState(false);
-  const [data, setData] = useState(null);
+  const [problemsOptions, setProblemsOptions] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    console.log('User in Tracker: ', user);
-    axios.get(`api/users/${user.id}`)
+    axios.get(`/api/users/${user.id}`)
       .then((response) => {
-        console.log('user data: ', response.data);
+        setUserData(response.data);
       })
       .catch(err => console.log('Err in get user data: ', err));
+  }, [showAddModal]);
 
-    axios.get('api/problems/titles')
+  useEffect(() => {
+    axios.get('/api/problems/titles')
       .then((response) => {
         const problemsOptions = response.data.map((item) => { return { value: item._id, label: item.title } });
-        setData(problemsOptions);
+        setProblemsOptions(problemsOptions);
       })
       .catch(err => console.log('Err in get problems options: ', err));
   }, []);
-
 
   return (
     <div className='tracker-container'>
@@ -33,9 +35,12 @@ const Tracker = ({ user, handleSignOut }) => {
         <button onClick={() => setShowAddModal(true)}>Add</button>
         <button>filter</button>
       </div>
-      {showAddModal && data && <AddModal setShow={setShowAddModal} datas={data} />}
+      {showAddModal && problemsOptions && <AddModal setShow={setShowAddModal} datas={problemsOptions} userId={user.id} />}
+      <div>
+        {userData && <Lists userData={userData} />}
+      </div>
     </div>
   )
 }
 
-export default Tracker
+export default Tracker;
