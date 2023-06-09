@@ -42,7 +42,7 @@ const Tracker = ({ user, handleSignOut }) => {
         </button>
         {/* <button>filter</button> */}
       </div>
-      {showAddModal && problemsOptions && <AddModal setShow={setShowAddModal} datas={problemsOptions} userId={user.id} />}
+      {showAddModal && problemsOptions && <AddModal setShow={setShowAddModal} datas={problemsOptions} userId={user.userId} />}
       <div>
         {userData && <Lists userData={userData} />}
       </div>
