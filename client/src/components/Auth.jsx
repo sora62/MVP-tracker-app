@@ -18,7 +18,6 @@ const Auth = ({ setIsLogin, setUser }) => {
     // Check for user token and ID in localStorage on component mount
     const userToken = localStorage.getItem('userToken');
     const userId = localStorage.getItem('userId');
-
     if (userToken && userId) {
       setIsLogin(true);
       fetchUserData(userToken, userId);
@@ -51,13 +50,11 @@ const Auth = ({ setIsLogin, setUser }) => {
 
   const fetchUserData = async (userToken, id) => {
     try {
-      console.log('ididididid: ', id);
       const response = await axios.get(`/api/users/${id}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      console.log('????', response.data);
       setUser(response.data);
       setIsLogin(true);
     } catch (error) {
@@ -69,6 +66,7 @@ const Auth = ({ setIsLogin, setUser }) => {
   };
 
   const formik = signUp ?
+    // validation for sign up
     useFormik({
       initialValues: {
         username: '',
@@ -82,14 +80,13 @@ const Auth = ({ setIsLogin, setUser }) => {
           const response = await axios.post('/api/register', values);
           if (response.status === 201) {
             setSignUp(false);
-          } else {
-            console.log(response.data);
           }
         } catch (error) {
           console.log('Err in sign up: ', error)
         }
       },
     }) :
+    // validation for sign in
     useFormik({
       initialValues: {
         email: '',
@@ -97,7 +94,6 @@ const Auth = ({ setIsLogin, setUser }) => {
       },
       validationSchema: validation,
       onSubmit: async (values) => {
-        console.log('values: ', values);
         try {
           const response = await axios.post('/api/login', values);
           if (response.status === 201) {
