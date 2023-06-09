@@ -1,5 +1,7 @@
 const User = require('../models/userModel');
+const UserData = require('../models/userDataModel');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   createNewUser: async (req, res) => {
@@ -34,13 +36,12 @@ module.exports = {
         return res.status(401).send('The password you\'ve entered is incorrect.');
       }
 
-      // User authenticated, create a session (e.g., using JWT)
-      // Generate and send a token in the response
-      // ...
+      const token = jwt.sign({ userId: user._id }, 'your_secret_key', { expiresIn: '1h' });
 
-      res.status(201).send({ id: user._id, username: user.username, email: user.email });
+      const userData = await UserData.findOne({ userId: user._id });
+      res.status(201).send({ userData: userData, id: user._id, token: token });
     } catch (error) {
       res.status(500).send('Login failed');
     }
-  }
+  },
 };

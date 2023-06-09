@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useFormik } from 'formik';
 import * as Yup from "yup";
-import Box from '@mui/material/Box';
-import { TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography } from '@mui/material';
+import { Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button, Divider } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import axios from 'axios';
 
 const Auth = ({ setIsLogin, setUser }) => {
@@ -16,6 +13,17 @@ const Auth = ({ setIsLogin, setUser }) => {
     // Clear the form everytime change signUp state
     formik.resetForm();
   }, [signUp]);
+
+  useEffect(() => {
+    // Check for user token and ID in localStorage on component mount
+    const userToken = localStorage.getItem('userToken');
+    const userId = localStorage.getItem('userId');
+
+    if (userToken && userId) {
+      setIsLogin(true);
+      fetchUserData(userToken, userId);
+    }
+  }, []);
 
   const validation = signUp ?
     Yup.object({
@@ -41,6 +49,25 @@ const Auth = ({ setIsLogin, setUser }) => {
         .required("Required"),
     });
 
+  const fetchUserData = async (userToken, id) => {
+    try {
+      console.log('ididididid: ', id);
+      const response = await axios.get(`/api/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log('????', response.data);
+      setUser(response.data);
+      setIsLogin(true);
+    } catch (error) {
+      console.log('Error fetching user data: ', error);
+      // Clear the user token and set the login state to false
+      localStorage.removeItem('userToken');
+      setIsLogin(false);
+    }
+  };
+
   const formik = signUp ?
     useFormik({
       initialValues: {
@@ -54,7 +81,6 @@ const Auth = ({ setIsLogin, setUser }) => {
         try {
           const response = await axios.post('/api/register', values);
           if (response.status === 201) {
-            alert('Sign up successfully!')
             setSignUp(false);
           } else {
             console.log(response.data);
@@ -76,8 +102,14 @@ const Auth = ({ setIsLogin, setUser }) => {
           const response = await axios.post('/api/login', values);
           if (response.status === 201) {
             alert('Sign in successfully!');
-            setUser(response.data); // { username: user.username, email: user.email }
+            const userToken = response.data.token;
+            const userId = response.data.id;
+            localStorage.setItem('userToken', userToken);
+            localStorage.setItem('userId', userId);
+            console.log('userData', response.data.userData)
+            setUser(response.data.userData);
             setIsLogin(true);
+            fetchUserData(userToken, userId);
           }
         } catch (error) {
           console.log('Err in sign up: ', error)

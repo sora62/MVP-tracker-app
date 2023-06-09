@@ -102,4 +102,18 @@ module.exports = {
       res.status(500).send('Failed to update note');
     }
   },
+
+  updateCode: async (req, res) => {
+    const { id, code, index } = req.body;
+    try {
+      const userData = await UserData.findById(id);
+      if (userData) {
+        userData.lists[index].code = code;
+        await userData.save();
+        res.status(200).send('Successfully updated code!');
+      }
+    } catch (error) {
+      res.status(500).send('Failed to update code');
+    }
+  },
 };

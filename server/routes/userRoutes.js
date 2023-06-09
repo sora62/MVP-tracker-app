@@ -16,6 +16,6 @@ router.post('/users/:id/lists', userDataController.addProblemsToLists);
 router.put('/users/:id/lists/delete', userDataController.deleteProblem);
 router.put('/users/:id/lists/checkmark', userDataController.updateCheckmark);
 router.put('/users/:id/lists/note', userDataController.updateNote);
-
+router.put('/users/:id/lists/code', userDataController.updateCode);
 
 module.exports = router;
