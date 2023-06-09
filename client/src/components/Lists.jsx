@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const Lists = ({ userData }) => {
   useEffect(() => {
-    console.log('List: ', userData);
+    console.log('userData: ', userData);
   }, [userData]);
 
   const updateCheckmark = (data) => {
@@ -25,6 +25,15 @@ const Lists = ({ userData }) => {
       .catch(err => console.log('Err in updateNote: ', err));
   };
 
+  const updateCode = (data) => {
+    data['id'] = userData._id;
+    axios.put(`/api/users/${userData.userId}/lists/code`, data)
+      .then(() => {
+        alert('Successfully updated!');
+      })
+      .catch(err => console.log('Err in updateCode: ', err));
+  };
+
   const deleteProblem = (data) => {
     data['id'] = userData._id;
     axios.put(`/api/users/${userData.userId}/lists/delete`, data)
@@ -37,13 +46,14 @@ const Lists = ({ userData }) => {
   return (
     <div className='lists-container'>
       {userData.lists.map((item, index) =>
-        (<List
+      (<List
         key={item.questionid}
         index={index}
         list={item}
         updateChecked={updateCheckmark}
         updateNote={updateNote}
-        deleteProblem={deleteProblem} />))}
+        deleteProblem={deleteProblem}
+        updateCode={updateCode} />))}
     </div>
   )
 }
