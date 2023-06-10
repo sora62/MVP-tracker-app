@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import List from './List';
 import axios from 'axios';
 
-const Lists = ({ user }) => {
+const Lists = ({ user, showAddModal }) => {
   const [userData, setUserData] = useState(user);
   const [updated, setUpdated] = useState(false);
 
@@ -12,7 +12,7 @@ const Lists = ({ user }) => {
         setUserData(response.data);
       })
       .catch(err => console.log('Err in get user data: ', err));
-  }, [updated]);
+  }, [updated, showAddModal]);
 
   const updateCheckmark = (data) => {
     data['id'] = userData._id;

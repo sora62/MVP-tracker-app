@@ -6,15 +6,6 @@ import axios from 'axios';
 const Tracker = ({ user, handleSignOut }) => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [problemsOptions, setProblemsOptions] = useState(null);
-  const [userData, setUserData] = useState(user);
-
-  useEffect(() => {
-    axios.get(`/api/users/${user.userId}`)
-      .then((response) => {
-        setUserData(response.data);
-      })
-      .catch(err => console.log('Err in get user data: ', err));
-  }, [showAddModal]);
 
   useEffect(() => {
     axios.get('/api/problems/titles')
@@ -34,17 +25,15 @@ const Tracker = ({ user, handleSignOut }) => {
           <div className="shared-text2">Logout</div>
         </button>
       </div>
-      <small>Welcome {userData.username}</small>
+      <small>Welcome back, {user.username}</small>
       <div className='tracker-button-container'>
         <button className="shared-btn2" id="add-problem-btn" onClick={() => setShowAddModal(true)}>
           <div className="shared-icon2"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></div>
           <div className="shared-text2">New Problem</div>
         </button>
       </div>
-      {showAddModal && problemsOptions && <AddModal setShow={setShowAddModal} datas={problemsOptions} userId={userData.userId} />}
-      <div>
-        {userData && <Lists user={userData} />}
-      </div>
+      {showAddModal && problemsOptions && <AddModal setShow={setShowAddModal} datas={problemsOptions} userId={user.userId} />}
+      {user && <Lists user={user} showAddModal={showAddModal} />}
     </div>
   )
 }
