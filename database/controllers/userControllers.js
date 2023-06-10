@@ -17,8 +17,13 @@ module.exports = {
         email,
         password: hashedPassword,
       });
-      console.log('user: ', newUser);
       await newUser.save();
+      const newUserData = new UserData({
+        userId: newUser._id,
+        username,
+        lists: []
+      });
+      await newUserData.save();
       res.status(201).send('User created successfully');
     } catch (error) {
       res.status(500).send('Failed to create user');

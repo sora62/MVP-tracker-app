@@ -66,7 +66,6 @@ module.exports = {
       const userData = await UserData.findById(id);
       if (userData) {
         userData.lists.splice(index, 1); // Delete the problem object at this index
-        console.log(userData.lists);
         await userData.save();
         res.status(201).send('Successfully deleted!');
       }

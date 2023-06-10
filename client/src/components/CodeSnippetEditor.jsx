@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import CodeEditor, { SelectionText } from "@uiw/react-textarea-code-editor";
+import React, { useState } from "react";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 
 const CodeSnippetEditor = ({ codeData, setShowCode, updateCode, index }) => {
-  const textRef = React.useRef();
   const [code, setCode] = useState(codeData);
-  useEffect(() => {
-    if (textRef.current) {
-      const obj = new SelectionText(textRef.current);
-      console.log("obj:", obj);
-    }
-  }, [code]);
+
   return (
     <>
       <div className='code-editor-container'>
@@ -20,7 +14,6 @@ const CodeSnippetEditor = ({ codeData, setShowCode, updateCode, index }) => {
         <div className="code-editor" data-color-mode="dark">
           <CodeEditor
             value={code}
-            ref={textRef}
             language="js"
             placeholder="Please enter JS code."
             onChange={(e) => setCode(e.target.value)}
@@ -32,10 +25,10 @@ const CodeSnippetEditor = ({ codeData, setShowCode, updateCode, index }) => {
             }}
           />
         </div>
-        <button className="save-btn" onClick={() => updateCode({ index: index, code: code })}>
-          <p className="save-text"> Save </p>
-          <span className="save-icon-box">
-            <svg className="save-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+        <button className="shared-btn" id="save-btn" onClick={() => updateCode({ index: index, code: code })}>
+          <p className="shared-text"> Save </p>
+          <span className="shared-icon-box">
+            <svg className="shared-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
           </span>
         </button>
       </div>

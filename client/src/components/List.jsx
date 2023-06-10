@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Typography, Chip, Stack, Checkbox, Container } from '@mui/material';
+import { orange } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -12,10 +13,16 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
   const [note, setNote] = useState(list.note);
   const [showCode, setShowCode] = useState(false);
 
-  useEffect(() => {
-    console.log('List: ', list);
-  }, [showCode,]);
-
+  const getColor = () => {
+    if (list.difficulty === 'Easy') {
+      return { bg: '#00AF9B26', color: '#00af9b' };
+    } else if (list.difficulty === 'Medium') {
+      return { bg: '#FFB80026', color: '#FFB800' };
+    } else if (list.difficulty === 'Hard') {
+      return { bg: '#FF2D5526', color: '#ff2d55' };
+    }
+    return '#757575';
+  };
   const handleCheckClick = async (e) => {
     e.stopPropagation();
     const newChecked = !checked;
@@ -41,16 +48,16 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
           id={`panel${index}bh-header`}
         >
           <div onClick={handleCheckClick}>
-            <Checkbox checked={checked} inputProps={{ 'aria-label': 'controlled' }} />
+            <Checkbox checked={checked} inputProps={{ 'aria-label': 'controlled' }}  sx={{ color: orange[600], '&.Mui-checked': { color: orange[400] } }}/>
           </div>
-          <Typography sx={{ width: '40%', display: 'flex', alignItems: 'center' }}>
-            {list.title}
+          <Typography className="list-title-box" sx={{ width: '40%', display: 'flex', alignItems: 'center' }}>
+            <a href={list.link} target="_blank" onClick={(e) => e.stopPropagation()}>{list.title}</a>
           </Typography>
-          <Typography sx={{ width: '10%', display: 'flex', alignItems: 'center' }}>
-            {list.difficulty}
-          </Typography>
-          <Stack direction="row" alignItems="center" width='30%' spacing={1} sx={{ flexWrap: 'wrap', gap: '5px' }}>
-            {list && list.tag.map((item) => (<Chip key={item} color="info" label={item} />))}
+          <Stack direction="row" alignItems="center" width='13%'>
+            <Chip label={list.difficulty} className="diff-chip" sx={{ backgroundColor: getColor().bg, color: getColor().color }} />
+          </Stack>
+          <Stack direction="row" alignItems="center" width='27%' spacing={1} sx={{ flexWrap: 'wrap', gap: '5px' }}>
+            {list && list.tag.map((item) => (<Chip key={item} label={item} className="tag-chip" />))}
           </Stack>
           <Typography sx={{ display: 'flex', ml: 2, alignItems: 'center' }}>
             <button className="code-btn" onClick={handleCodeClick}>
@@ -61,21 +68,30 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
         </AccordionSummary>
         <AccordionDetails>
           <Container sx={{ minHeight: '70px', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-            <small className='create-date'>{list && moment(list.date).fromNow()}</small>
+            <div className='note-header'>
+              <small>Note:</small>
+              <small>{list && moment(list.date).fromNow()}</small>
+            </div>
+
             {list && <>
               <ReactQuill value={note} onChange={(value) => setNote(value)} />
-              <button className="save-btn" onClick={() => { updateNote({ index: index, note: note }) }}>
-                <p className="save-text"> Save </p>
-                <span className="save-icon-box">
-                  <svg className="save-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            </>}
+            <div className='shared-btn-box'>
+              <button className="shared-btn" id="save-btn" onClick={() => { updateNote({ index: index, note: note }) }}>
+                <p className="shared-text"> Save </p>
+                <span className="shared-icon-box">
+                  <svg className="shared-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </span>
               </button>
-            </>}
-            <button className="delete-btn" onClick={() => deleteProblem({ index: index })}>
-              <svg className="delete-svgIcon" viewBox="0 0 448 512">
-                <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
-              </svg>
-            </button>
+              <button className="shared-btn" onClick={() => deleteProblem({ index: index })}>
+                <p className="shared-text"> Delete </p>
+                <span className="shared-icon-box">
+                  <svg className="shared-icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
           </Container>
         </AccordionDetails>
       </Accordion>

@@ -5,7 +5,7 @@ import { Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput,
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
-const Auth = ({ setIsLogin, setUser }) => {
+const Auth = ({ setIsLogin, setUser, isLogin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
 
@@ -79,10 +79,12 @@ const Auth = ({ setIsLogin, setUser }) => {
         try {
           const response = await axios.post('/api/register', values);
           if (response.status === 201) {
+            alert('Congratulations! You have successfully signed up.');
             setSignUp(false);
           }
         } catch (error) {
           console.log('Err in sign up: ', error)
+          alert(error.response.data);
         }
       },
     }) :
@@ -97,7 +99,7 @@ const Auth = ({ setIsLogin, setUser }) => {
         try {
           const response = await axios.post('/api/login', values);
           if (response.status === 201) {
-            alert('Sign in successfully!');
+            alert(`Welcome back, ${response.data.userData.username}`);
             const userToken = response.data.token;
             const userId = response.data.id;
             localStorage.setItem('userToken', userToken);

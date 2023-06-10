@@ -9,11 +9,13 @@ const App = () => {
   const handleSignOut = () => {
     setUser(null);
     setIsLogin(false);
+    // Clear the localStorage token after sign out
+    localStorage.removeItem('userToken');
   };
 
   return (
     <div className='app-container'>
-      {!isLogin && <Auth setIsLogin={setIsLogin} setUser={setUser} />}
+      {!isLogin && <Auth setIsLogin={setIsLogin} setUser={setUser} isLogin={isLogin} />}
       {isLogin && user && <Tracker user={user} handleSignOut={handleSignOut} />}
     </div>
   )

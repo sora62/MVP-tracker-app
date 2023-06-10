@@ -2,16 +2,24 @@ import React, { useEffect, useState } from 'react'
 import List from './List';
 import axios from 'axios';
 
-const Lists = ({ userData }) => {
+const Lists = ({ user }) => {
+  const [userData, setUserData] = useState(user);
+  const [updated, setUpdated] = useState(false);
+
   useEffect(() => {
-    console.log('userData: ', userData);
-  }, [userData]);
+    axios.get(`/api/users/${userData.userId}`)
+      .then((response) => {
+        setUserData(response.data);
+      })
+      .catch(err => console.log('Err in get user data: ', err));
+  }, [updated]);
 
   const updateCheckmark = (data) => {
     data['id'] = userData._id;
     axios.put(`/api/users/${userData.userId}/lists/checkmark`, data)
       .then(() => {
         alert('Successfully updated!');
+        setUpdated(!updated);
       })
       .catch(err => console.log('Err in updateCheckmark: ', err));
   };
@@ -21,6 +29,7 @@ const Lists = ({ userData }) => {
     axios.put(`/api/users/${userData.userId}/lists/note`, data)
       .then(() => {
         alert('Successfully updated!');
+        setUpdated(!updated);
       })
       .catch(err => console.log('Err in updateNote: ', err));
   };
@@ -30,6 +39,7 @@ const Lists = ({ userData }) => {
     axios.put(`/api/users/${userData.userId}/lists/code`, data)
       .then(() => {
         alert('Successfully updated!');
+        setUpdated(!updated);
       })
       .catch(err => console.log('Err in updateCode: ', err));
   };
@@ -38,7 +48,7 @@ const Lists = ({ userData }) => {
     data['id'] = userData._id;
     axios.put(`/api/users/${userData.userId}/lists/delete`, data)
       .then(() => {
-        alert('Successfully deleted!');
+        setUpdated(!updated);
       })
       .catch(err => console.log('Err in get user data: ', err));
   };
