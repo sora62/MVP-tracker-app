@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Tracker from './Tracker';
 import Auth from './Auth';
+import { Provider } from 'react-redux';
+import store from '../store/store';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -14,10 +16,12 @@ const App = () => {
   };
 
   return (
-    <div className='app-container'>
-      {!isLogin && <Auth setIsLogin={setIsLogin} setUser={setUser} isLogin={isLogin} />}
-      {isLogin && user && <Tracker user={user} handleSignOut={handleSignOut} />}
-    </div>
+    <Provider store={store}>
+      <div className='app-container'>
+        {!isLogin && <Auth setIsLogin={setIsLogin} setUser={setUser} isLogin={isLogin} />}
+        {isLogin && user && <Tracker user={user} handleSignOut={handleSignOut} />}
+      </div>
+    </Provider>
   )
 }
 

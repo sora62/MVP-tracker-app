@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { deleteProblem, updateCode } from '../features/userDataSlice';
 import { Accordion, AccordionDetails, AccordionSummary, Typography, Chip, Stack, Checkbox, Container } from '@mui/material';
 import { orange } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -6,10 +8,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CodeSnippetEditor from './CodeSnippetEditor';
 import moment from 'moment';
+import axios from 'axios';
 
-const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCode }) => {
+const List = ({ listId, list, index }) => {
+  const dispatch = useDispatch();
+
   const [expanded, setExpanded] = useState(false);
-  const [checked, setChecked] = useState(list.checkmark);
+  const [checked, setChecked] = useState(list.checkmark)
   const [note, setNote] = useState(list.note);
   const [showCode, setShowCode] = useState(false);
 
@@ -23,17 +28,51 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
     }
     return '#757575';
   };
-  const handleCheckClick = async (e) => {
+
+  const handleToggleCheckmark = (e) => {
     e.stopPropagation();
     const newChecked = !checked;
     setChecked(newChecked);
-    updateChecked({ index: index, checkmark: newChecked });
+    const data = { id: listId, index: index, checkmark: newChecked };
+    axios.put(`/api/users/${listId}/lists/checkmark`, data)
+      .then(() => {
+        alert('Successfully updated!');
+      })
+      .catch(err => console.log('Err in update checkmark: ', err));
+  };
+
+  const handleSaveNote = () => {
+    const data = { id: listId, index: index, note: note };
+    axios.put(`/api/users/${listId}/lists/note`, data)
+      .then(() => {
+        alert('Successfully updated!');
+      })
+      .catch(err => console.log('Err in save note: ', err));
+  };
+
+  const handleDeleteProblem = () => {
+    const data = { id: listId, index: index };
+    axios.put(`/api/users/${listId}/lists/delete`, data)
+      .then(() => {
+        dispatch(deleteProblem({ index: index }));
+      })
+      .catch(err => console.log('Err in delete problem: ', err));
   };
 
   const handleCodeClick = async (e) => {
     e.stopPropagation();
     setShowCode(!showCode);
-  }
+  };
+
+  const handleSaveCode = (code) => {
+    const data = { id: listId, index: index, code: code };
+    axios.put(`/api/users/${listId}/lists/code`, data)
+      .then(() => {
+        dispatch(updateCode(data));
+        alert('Successfully updated!');
+      })
+      .catch(err => console.log('Err in update code: ', err));
+  };
 
   const handleChange = (panel) => (e, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -47,8 +86,8 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
           aria-controls={`panel${index + 1}bh-content`}
           id={`panel${index}bh-header`}
         >
-          <div onClick={handleCheckClick}>
-            <Checkbox checked={checked} inputProps={{ 'aria-label': 'controlled' }}  sx={{ color: orange[600], '&.Mui-checked': { color: orange[400] } }}/>
+          <div onClick={handleToggleCheckmark}>
+            <Checkbox checked={checked} inputProps={{ 'aria-label': 'controlled' }} sx={{ color: orange[600], '&.Mui-checked': { color: orange[400] } }} />
           </div>
           <Typography className="list-title-box" sx={{ width: '40%', display: 'flex', alignItems: 'center' }}>
             <a href={list.link} target="_blank" onClick={(e) => e.stopPropagation()}>{list.title}</a>
@@ -77,13 +116,13 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
               <ReactQuill value={note} onChange={(value) => setNote(value)} />
             </>}
             <div className='shared-btn-box'>
-              <button className="shared-btn" id="save-btn" onClick={() => { updateNote({ index: index, note: note }) }}>
+              <button className="shared-btn" id="save-btn" onClick={handleSaveNote}>
                 <p className="shared-text"> Save </p>
                 <span className="shared-icon-box">
                   <svg className="shared-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                 </span>
               </button>
-              <button className="shared-btn" onClick={() => deleteProblem({ index: index })}>
+              <button className="shared-btn" onClick={handleDeleteProblem}>
                 <p className="shared-text"> Delete </p>
                 <span className="shared-icon-box">
                   <svg className="shared-icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -95,7 +134,7 @@ const List = ({ list, index, updateChecked, updateNote, deleteProblem, updateCod
           </Container>
         </AccordionDetails>
       </Accordion>
-      {showCode && list && <CodeSnippetEditor setShowCode={setShowCode} codeData={list.code} updateCode={updateCode} index={index} />}
+      {showCode && list && <CodeSnippetEditor setShowCode={setShowCode} codeData={list.code} handleSaveCode={handleSaveCode} />}
     </>
   );
 }
