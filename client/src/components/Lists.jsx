@@ -50,7 +50,6 @@ const Lists = ({ user, showAddModal }) => {
   return (
     <div className='lists-container'>
       {userData && <small>Total: {userData.lists.length}</small>}
-      {console.log(currentList)}
       {currentList && currentList.map((item, index) => (
         <List key={item.questionid} listId={userData._id} index={offset + index} list={item} />
       ))}
