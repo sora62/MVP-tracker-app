@@ -83,7 +83,7 @@ const List = ({ listId, list, index }) => {
       <Accordion expanded={expanded === `panel${index}`} onChange={handleChange(`panel${index}`)}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls={`panel${index + 1}bh-content`}
+          aria-controls={`panel${index}bh-content`}
           id={`panel${index}bh-header`}
         >
           <div onClick={handleToggleCheckmark}>
