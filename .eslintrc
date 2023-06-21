@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "airbnb",
+    "airbnb/hooks"
+  ],
+  "rules": {
+    "no-console": "off",
+    "no-restricted-syntax": ["error"],
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off",
+    "react/prop-types": "off",
+    "no-multi-str": "off",
+    "no-underscore-dangle": "off"
+  }
+}

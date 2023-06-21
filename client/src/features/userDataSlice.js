@@ -4,9 +4,7 @@ const userDataSlice = createSlice({
   name: 'userData',
   initialState: null,
   reducers: {
-    setUserData: (state, action) => {
-      return action.payload;
-    },
+    setUserData: (state, action) => action.payload,
     updateCode: (state, action) => {
       const { index, code } = action.payload;
       state.lists[index].code = code;

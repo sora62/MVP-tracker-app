@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../features/userDataSlice';
 import { useFormik } from 'formik';
-import * as Yup from "yup";
-import { Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button, Divider } from '@mui/material';
+import * as Yup from 'yup';
+import {
+  Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button, Divider,
+} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
+import { setUserData } from '../features/userDataSlice';
 
-const Auth = ({ setIsLogin }) => {
+function Auth({ setIsLogin }) {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
@@ -35,7 +37,7 @@ const Auth = ({ setIsLogin }) => {
         },
       });
       console.log('data: ', response.data);
-      dispatch(setUserData(response.data))
+      dispatch(setUserData(response.data));
       setIsLogin(true);
     } catch (error) {
       console.log('Error fetching user data: ', error);
@@ -45,37 +47,37 @@ const Auth = ({ setIsLogin }) => {
     }
   };
 
-  const validation = signUp ?
-    Yup.object({
+  const validation = signUp
+    ? Yup.object({
       username: Yup.string()
-        .min(2, "Length must be between 2 and 15 characters")
-        .max(15, "Length must be between 2 and 15 characters")
-        .required("Required"),
+        .min(2, 'Length must be between 2 and 15 characters')
+        .max(15, 'Length must be between 2 and 15 characters')
+        .required('Required'),
       email: Yup.string()
-        .email("Invalid email addresss")
-        .required("Required"),
+        .email('Invalid email addresss')
+        .required('Required'),
       password: Yup.string()
-        .min(8, "Length must be between 8 and 128 characters")
-        .max(128, "Length must be between 8 and 128 characters")
-        .required("Required"),
-    }) :
-    Yup.object({
+        .min(8, 'Length must be between 8 and 128 characters')
+        .max(128, 'Length must be between 8 and 128 characters')
+        .required('Required'),
+    })
+    : Yup.object({
       email: Yup.string()
-        .email("Invalid email addresss")
-        .required("Required"),
+        .email('Invalid email addresss')
+        .required('Required'),
       password: Yup.string()
-        .min(8, "Length must be between 8 and 128 characters")
-        .max(128, "Length must be between 8 and 128 characters")
-        .required("Required"),
+        .min(8, 'Length must be between 8 and 128 characters')
+        .max(128, 'Length must be between 8 and 128 characters')
+        .required('Required'),
     });
 
-  const formik = signUp ?
+  const formik = signUp
     // validation for sign up
-    useFormik({
+    ? useFormik({
       initialValues: {
         username: '',
         email: '',
-        password: ''
+        password: '',
       },
       validationSchema: validation,
       onSubmit: async (values) => {
@@ -87,16 +89,16 @@ const Auth = ({ setIsLogin }) => {
             setSignUp(false);
           }
         } catch (error) {
-          console.log('Err in sign up: ', error)
+          console.log('Err in sign up: ', error);
           alert(error.response.data);
         }
       },
-    }) :
+    })
     // validation for sign in
-    useFormik({
+    : useFormik({
       initialValues: {
         email: '',
-        password: ''
+        password: '',
       },
       validationSchema: validation,
       onSubmit: async (values) => {
@@ -111,14 +113,14 @@ const Auth = ({ setIsLogin }) => {
             fetchUserData(userToken, userId);
           }
         } catch (error) {
-          console.log('Err in sign up: ', error)
+          console.log('Err in sign up: ', error);
           alert(error.response.data);
         }
       },
     });
 
   return (
-    <div className='auth-container'>
+    <div className="auth-container">
       <h1>Welcome!</h1>
       <Box
         component="form"
@@ -126,22 +128,24 @@ const Auth = ({ setIsLogin }) => {
         autoComplete="on"
         onSubmit={formik.handleSubmit}
       >
-        {signUp && <TextField
+        {signUp && (
+        <TextField
           required
           id="outlined-required"
-          name='username'
+          name="username"
           label="Userame"
           value={formik.values.username || ''}
           onChange={formik.handleChange}
           error={formik.touched.username && Boolean(formik.errors.username)}
           helperText={formik.touched.username && formik.errors.username}
-        />}
+        />
+        )}
         <TextField
           required
           id="outlined-email"
-          type='email'
-          name='email'
-          label='Email'
+          type="email"
+          name="email"
+          label="Email"
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -152,12 +156,12 @@ const Auth = ({ setIsLogin }) => {
           <OutlinedInput
             id="outlined-adornment-password"
             label="Password"
-            name='password'
+            name="password"
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
             type={showPassword ? 'text' : 'password'}
-            endAdornment={
+            endAdornment={(
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
@@ -168,7 +172,7 @@ const Auth = ({ setIsLogin }) => {
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
-            }
+            )}
           />
           {formik.touched.password && formik.errors.password && (
             <Typography variant="caption" color="error">
@@ -179,10 +183,20 @@ const Auth = ({ setIsLogin }) => {
         <Button variant="contained" color="success" type="submit">{signUp ? 'Sign Up' : 'Sign In'}</Button>
         <Divider>Or sign up with</Divider>
       </Box>
-      {!signUp && <div>Don't have an account? <u onClick={() => setSignUp(true)}>Sign up</u></div>}
-      {signUp && <div>Already have an account? <u onClick={() => setSignUp(false)}>Sign in</u></div>}
-    </div >
-  )
+      {!signUp && (
+      <div>
+        Don't have an account?
+        <u onClick={() => setSignUp(true)}>Sign up</u>
+      </div>
+      )}
+      {signUp && (
+      <div>
+        Already have an account?
+        <u onClick={() => setSignUp(false)}>Sign in</u>
+      </div>
+      )}
+    </div>
+  );
 }
 
-export default Auth
+export default Auth;

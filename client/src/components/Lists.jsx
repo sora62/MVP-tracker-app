@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import List from './List';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserData } from '../features/userDataSlice';
 import { Pagination, Stack } from '@mui/material';
+import { setUserData } from '../features/userDataSlice';
+import List from './List';
 
-const Lists = ({ showAddModal }) => {
+function Lists({ showAddModal }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const [currentList, setCurrentList] = useState([]);
@@ -28,7 +28,7 @@ const Lists = ({ showAddModal }) => {
         .then((response) => {
           dispatch(setUserData(response.data));
         })
-        .catch(err => console.log('Err in get user data: ', err));
+        .catch((err) => console.log('Err in get user data: ', err));
     }
   }, [dispatch, showAddModal]);
 
@@ -44,22 +44,27 @@ const Lists = ({ showAddModal }) => {
   };
 
   return (
-    <div className='lists-container'>
-      {userData && <small>Total: {userData.lists.length}</small>}
-      {currentList && currentList.map((item, index) => (
+    <div className="lists-container">
+      {userData && (
+      <small>
+        Total:
+        {userData.lists.length}
+      </small>
+      )}
+      {currentList.map((item, index) => (
         <List key={item.questionid} listId={userData._id} index={offset + index} list={item} />
       ))}
       <Stack spacing={2} mt={5}>
-        {userData && (
+        {userData ? (
           <Pagination
             count={Math.ceil(userData.lists.length / itemsPerPage)}
             page={currentPage}
             onChange={handlePageChange}
           />
-        )}
+        ) : null}
       </Stack>
     </div>
-  )
+  );
 }
 
 export default Lists;
