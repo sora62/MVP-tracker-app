@@ -5,17 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../features/userDataSlice';
 import { Pagination, Stack } from '@mui/material';
 
-const Lists = ({ user, showAddModal }) => {
+const Lists = ({ showAddModal }) => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
   const [currentList, setCurrentList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [offset, setOffset] = useState(0); // offset for pagination index
   const itemsPerPage = 10; // Number of items to display per page
-
-  if (!userData) {
-    dispatch(setUserData(user));
-  }
 
   useEffect(() => {
     if (userData) {
@@ -24,7 +20,7 @@ const Lists = ({ user, showAddModal }) => {
       setOffset(indexOfFirstItem);
       setCurrentList(userData.lists.slice(indexOfFirstItem, indexOfLastItem));
     }
-  }, [dispatch, userData, user, currentPage]);
+  }, [dispatch, userData, currentPage]);
 
   useEffect(() => {
     if (userData) {

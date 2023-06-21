@@ -6,11 +6,10 @@ import { setUserData } from '../features/userDataSlice';
 
 const App = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState(null);
+  //const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
-    setUser(null);
     dispatch(setUserData(null));
     setIsLogin(false);
     // Clear the localStorage token after sign out
@@ -19,8 +18,8 @@ const App = () => {
 
   return (
       <div className='app-container'>
-        {!isLogin && <Auth setIsLogin={setIsLogin} setUser={setUser} isLogin={isLogin} />}
-        {isLogin && user && <Tracker user={user} handleSignOut={handleSignOut} />}
+        {!isLogin && <Auth setIsLogin={setIsLogin} isLogin={isLogin} />}
+        {isLogin && <Tracker handleSignOut={handleSignOut} />}
       </div>
   )
 }

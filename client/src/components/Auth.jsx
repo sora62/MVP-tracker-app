@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../features/userDataSlice';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button, Divider } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
-const Auth = ({ setIsLogin, setUser, isLogin }) => {
+const Auth = ({ setIsLogin }) => {
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [signUp, setSignUp] = useState(false);
 
@@ -23,6 +26,24 @@ const Auth = ({ setIsLogin, setUser, isLogin }) => {
       fetchUserData(userToken, userId);
     }
   }, []);
+
+  const fetchUserData = async (userToken, id) => {
+    try {
+      const response = await axios.get(`/api/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+      console.log('data: ', response.data);
+      dispatch(setUserData(response.data))
+      setIsLogin(true);
+    } catch (error) {
+      console.log('Error fetching user data: ', error);
+      // Clear the user token and set the login state to false
+      localStorage.removeItem('userToken');
+      setIsLogin(false);
+    }
+  };
 
   const validation = signUp ?
     Yup.object({
@@ -47,23 +68,6 @@ const Auth = ({ setIsLogin, setUser, isLogin }) => {
         .max(128, "Length must be between 8 and 128 characters")
         .required("Required"),
     });
-
-  const fetchUserData = async (userToken, id) => {
-    try {
-      const response = await axios.get(`/api/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
-        },
-      });
-      setUser(response.data);
-      setIsLogin(true);
-    } catch (error) {
-      console.log('Error fetching user data: ', error);
-      // Clear the user token and set the login state to false
-      localStorage.removeItem('userToken');
-      setIsLogin(false);
-    }
-  };
 
   const formik = signUp ?
     // validation for sign up
@@ -104,9 +108,6 @@ const Auth = ({ setIsLogin, setUser, isLogin }) => {
             const userId = response.data.id;
             localStorage.setItem('userToken', userToken);
             localStorage.setItem('userId', userId);
-            console.log('userData', response.data.userData)
-            setUser(response.data.userData);
-            setIsLogin(true);
             fetchUserData(userToken, userId);
           }
         } catch (error) {

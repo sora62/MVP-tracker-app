@@ -3,6 +3,7 @@ const UserData = require('../models/userDataModel');
 module.exports = {
   getUserDataByUserId: async (req, res) => {
     const { id } = req.params;
+    const { searchQuery } = req.query;
     try {
       const userData = await UserData.findOne({ userId: id });
       if (!userData) {
@@ -11,8 +12,13 @@ module.exports = {
         });
         await newUserData.save();
         return res.status(200).send(newUserData);
-      } else {
+      } else if (!searchQuery) {
         return res.status(200).send(userData);
+      } else {
+        console.log(searchQuery);
+        // find matching searchQuery in the title of each item of userData.lists
+        const matchingItems = userData.lists.filter(item => item.title.toLocaleLowerCase().includes(searchQuery));
+        return res.status(200).send(matchingItems);
       }
     } catch (error) {
       res.status(500).send('Failed to create user');
