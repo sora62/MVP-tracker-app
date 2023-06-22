@@ -1,10 +1,11 @@
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   devtool: 'source-map',
   entry: `${SRC_DIR}/index.jsx`,
   output: {
@@ -12,7 +13,12 @@ module.exports = {
     path: DIST_DIR,
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['.js', '.jsx'],
+  },
+  optimization: {
+    minimizer: [
+      new TerserPlugin(),
+    ],
   },
   module: {
     rules: [
@@ -28,11 +34,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource',
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },
