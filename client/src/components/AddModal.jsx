@@ -65,7 +65,6 @@ function AddModal({ setShow, userId }) {
         <form className="add-form" onSubmit={handleSubmit}>
           <label>
             Search LeetCode Problem By Title:
-            {problemsOptions && (
             <Select
               defaultValue={problem}
               isSearchable
@@ -74,7 +73,6 @@ function AddModal({ setShow, userId }) {
               required
               className="problem-select"
             />
-            )}
           </label>
           <label>
             Tags:

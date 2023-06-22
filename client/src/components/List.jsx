@@ -10,7 +10,7 @@ import 'react-quill/dist/quill.snow.css';
 import moment from 'moment';
 import axios from 'axios';
 import CodeSnippetEditor from './CodeSnippetEditor';
-import { deleteProblem, updateCode } from '../features/userDataSlice';
+import { deleteProblem, updateCode, updateCheckmark } from '../features/userDataSlice';
 
 function List({ listId, list, index }) {
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ function List({ listId, list, index }) {
     const data = { id: listId, index, checkmark: newChecked };
     axios.put(`/api/users/${listId}/lists/checkmark`, data)
       .then(() => {
-        alert('Successfully updated!');
+        dispatch(updateCheckmark(data));
       })
       .catch((err) => console.log('Err in update checkmark: ', err));
   };

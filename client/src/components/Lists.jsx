@@ -23,7 +23,7 @@ function Lists({ showAddModal }) {
   }, [dispatch, userData, currentPage]);
 
   useEffect(() => {
-    if (userData) {
+    if (userData.userId) {
       axios.get(`/api/users/${userData.userId}`)
         .then((response) => {
           dispatch(setUserData(response.data));

@@ -2,9 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userDataSlice = createSlice({
   name: 'userData',
-  initialState: null,
+  initialState: { lists: [] },
   reducers: {
     setUserData: (state, action) => action.payload,
+    updateCheckmark: (state, action) => {
+      const { index, checkmark } = action.payload;
+      state.lists[index].checkmark = checkmark;
+    },
     updateCode: (state, action) => {
       const { index, code } = action.payload;
       state.lists[index].code = code;
@@ -16,6 +20,8 @@ const userDataSlice = createSlice({
   },
 });
 
-export const { setUserData, updateCode, deleteProblem } = userDataSlice.actions;
+export const {
+  setUserData, updateCheckmark, updateCode, deleteProblem,
+} = userDataSlice.actions;
 
 export default userDataSlice.reducer;
