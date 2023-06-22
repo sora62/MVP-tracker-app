@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { setUserData } from '../features/userDataSlice';
 import AddModal from './AddModal';
-import Lists from './Lists';
+const Lists = lazy(() => import('./Lists'));
 
 function Tracker({ handleSignOut }) {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userData);
+
   const [showAddModal, setShowAddModal] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -49,10 +50,10 @@ function Tracker({ handleSignOut }) {
         </button>
       </div>
       {userData && (
-      <small>
-        Welcome back,
-        {userData.username}
-      </small>
+        <small>
+          Welcome back,
+          {userData.username}
+        </small>
       )}
       <div className="tracker-button-container">
         <div className="search-button-container">
@@ -93,8 +94,10 @@ function Tracker({ handleSignOut }) {
         </button>
       </div>
       {showAddModal && userData
-      && <AddModal setShow={setShowAddModal} userId={userData.userId} />}
-      <Lists showAddModal={showAddModal} />
+        && <AddModal setShow={setShowAddModal} userId={userData.userId} />}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Lists showAddModal={showAddModal} />
+      </Suspense>
     </div>
   );
 }

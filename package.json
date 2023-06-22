@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "react-dev": "webpack --watch",
+    "react-dev": "webpack --watch --mode production",
     "start": "nodemon server/app.js",
     "test": "jest --verbose",
     "lint": "eslint ."
