@@ -6,8 +6,8 @@ A LeetCode tracker to manage your LeetCode progress, including advanced features
 ## Screenshots
 
 <img width="1000" alt="Screenshot 2023-06-22 at 12 52 00 AM" src="https://github.com/sora62/tracker-app/assets/31125728/5e51fffa-7255-4f90-96d7-3198d46c2cda">
-<img width="500" alt="image" src="https://github.com/sora62/tracker-app/assets/31125728/b764997f-7e54-4491-a411-ccf3afadd725">
-<img width="500" alt="image" src="https://github.com/sora62/tracker-app/assets/31125728/e74bd3ec-14cb-48cc-82a5-5dfc0d3b84bb">
+<img width="400" alt="image" src="https://github.com/sora62/tracker-app/assets/31125728/b764997f-7e54-4491-a411-ccf3afadd725">
+<img width="400" alt="image" src="https://github.com/sora62/tracker-app/assets/31125728/e74bd3ec-14cb-48cc-82a5-5dfc0d3b84bb">
 
 
 ## Tech Stack
