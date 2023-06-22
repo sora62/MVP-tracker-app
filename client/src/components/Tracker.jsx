@@ -51,8 +51,7 @@ function Tracker({ handleSignOut }) {
       </div>
       {userData && (
         <small>
-          Welcome back,
-          {userData.username}
+          {`Welcome back, ${userData.username || ''}`}
         </small>
       )}
       <div className="tracker-button-container">
