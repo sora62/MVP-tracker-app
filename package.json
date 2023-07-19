@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "npm run react-dev && npm start",
     "react-dev": "webpack --watch --mode production",
     "start": "nodemon server/app.js",
     "test": "jest --verbose",
