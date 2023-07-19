@@ -36,7 +36,6 @@ function Auth({ setIsLogin }) {
           Authorization: `Bearer ${userToken}`,
         },
       });
-      console.log('data: ', response.data);
       dispatch(setUserData(response.data));
       setIsLogin(true);
     } catch (error) {

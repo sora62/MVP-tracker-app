@@ -28,6 +28,7 @@ function App() {
 
   return (
     <div className="app-container">
+      <img src={require('../../dist/LeetNote_logo.png')} alt="logo" className="logo" />
       {!isLogin && <Auth setIsLogin={setIsLogin} isLogin={isLogin} />}
       {isLogin && <Tracker handleSignOut={handleSignOut} />}
     </div>
