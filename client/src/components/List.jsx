@@ -95,7 +95,7 @@ function List({ listId, list, index }) {
           <Stack direction="row" alignItems="center" width="13%">
             <Chip label={list.difficulty} className="diff-chip" sx={{ backgroundColor: getColor().bg, color: getColor().color }} />
           </Stack>
-          <Stack direction="row" alignItems="center" width="27%" spacing={1} sx={{ flexWrap: 'wrap', gap: '5px' }}>
+          <Stack direction="row" alignItems="center" width="30%" spacing={1} sx={{ flexWrap: 'wrap', gap: '5px' }}>
             {list && list.tag.map((item) => (<Chip key={item} label={item} className="tag-chip" />))}
           </Stack>
           <Typography sx={{ display: 'flex', ml: 2, alignItems: 'center' }}>

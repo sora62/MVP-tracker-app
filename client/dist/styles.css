@@ -17,7 +17,7 @@ body {
   min-height: 1000px;
 }
 
-h1 {
+h2 {
   color: #75b092;
 }
 
@@ -28,14 +28,22 @@ button {
 /* App.jsx */
 .app-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   width: 100%;
+}
+
+.logo{
+  margin-left: 140px;
+  width: 300px;
+  height: 100px;
+  object-fit: cover;
 }
 
 /* Auth.jsx */
 .auth-container {
   display: flex;
   flex-direction: column;
+  align-self: center;
   justify-content: center;
   align-items: center;
   background-color: white;
@@ -67,18 +75,25 @@ button {
 .tracker-container {
   display: flex;
   flex-direction: column;
+  align-self: center;
   margin: 20px 100px;
   padding: 50px;
   border-radius: 10px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.06) 0 6px 25px, rgba(0, 0, 0, 0.08) 0 0 0 1px;
-  width: 70%;
+  width: 80%;
   min-width: 800px;
 }
 
 .tracker-header {
   display: flex;
   justify-content: space-between;
+}
+
+.tracker-header > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .tracker-button-container {
