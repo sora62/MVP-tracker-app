@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --watch --mode production & nodemon server/app.js",
+    "build": "node server/index.js & npm run react-dev",
     "react-dev": "webpack --watch --mode production",
     "start": "nodemon server/app.js",
     "test": "jest --verbose",
@@ -31,6 +31,7 @@
     "jest": "^29.5.0",
     "jsonwebtoken": "^9.0.0",
     "moment": "^2.29.4",
+    "mongodb": "^5.7.0",
     "mongoose": "^7.2.2",
     "morgan": "^1.10.0",
     "react": "^18.2.0",
