@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js & npm run react-dev",
+    "build": "node server/index.js & npm run react-dev",
     "react-dev": "webpack --watch --mode production",
-    "build": "nodemon server/app.js",
+    "start": "nodemon server/app.js",
     "test": "jest --verbose",
     "lint": "eslint ."
   },
