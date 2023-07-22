@@ -14,4 +14,11 @@ app.use(morgan('dev'));
 app.use('/api', router);
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
+app.set('port', (process.env.PORT || 8080));
+
+// Start node server
+app.listen(app.get('port'), () => {
+  console.log(`Node server is running on port${app.get('port')}`);
+});
+
 module.exports = app;
