@@ -2,6 +2,7 @@
 
 A LeetCode tracker to manage your LeetCode progress, including advanced features such as search, the ability to add personal notes, and the convenience of storing code snippets for enhanced productivity.
 
+Visit the app here: https://leetnote1-370e5e4d14e6.herokuapp.com/
 
 ## Screenshots
 
