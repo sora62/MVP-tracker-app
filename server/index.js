@@ -14,8 +14,8 @@ app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, '../client/dist')));
 app.use('/api', router);
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/client/dist/index.html`));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 module.exports = app;
