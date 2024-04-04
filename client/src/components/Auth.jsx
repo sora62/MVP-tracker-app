@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
-  Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button, Divider,
+  Box, TextField, FormControl, IconButton, InputAdornment, OutlinedInput, InputLabel, Typography, Button,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
@@ -118,8 +118,34 @@ function Auth({ setIsLogin }) {
       },
     });
 
+  const handleDemoClick = async () => {
+    try {
+      const response = await axios.get('/api/demo');
+      if (response.status === 200) {
+        dispatch(setUserData(response.data));
+        setIsLogin(true);
+      }
+    } catch (error) {
+      console.log('Err in login demo acc: ', error);
+    }
+  };
+
   return (
     <div className="auth-container">
+      <Button
+        variant="contained"
+        size="large"
+        sx={{
+          backgroundColor: '#ff9b3d',
+          '&:hover': {
+            backgroundColor: '#fc7b03',
+          },
+        }}
+        onClick={handleDemoClick}
+      >
+        Try it with a demo account!
+      </Button>
+      <br />
       <h1>Welcome!</h1>
       <Box
         component="form"
@@ -128,16 +154,16 @@ function Auth({ setIsLogin }) {
         onSubmit={formik.handleSubmit}
       >
         {signUp && (
-        <TextField
-          required
-          id="outlined-required"
-          name="username"
-          label="Userame"
-          value={formik.values.username || ''}
-          onChange={formik.handleChange}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
-        />
+          <TextField
+            required
+            id="outlined-required"
+            name="username"
+            label="Userame"
+            value={formik.values.username || ''}
+            onChange={formik.handleChange}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+          />
         )}
         <TextField
           required
@@ -179,20 +205,21 @@ function Auth({ setIsLogin }) {
             </Typography>
           )}
         </FormControl>
-        <Button variant="contained" color="success" type="submit">{signUp ? 'Sign Up' : 'Sign In'}</Button>
-        <Divider>Or sign up with</Divider>
+        <Button variant="outlined" color="success" type="submit">{signUp ? 'Sign Up' : 'Sign In'}</Button>
       </Box>
       {!signUp && (
-      <div>
-        Don't have an account?
-        <u onClick={() => setSignUp(true)}>Sign up</u>
-      </div>
+        <div>
+          Don't have an account?
+          {' '}
+          <u onClick={() => setSignUp(true)}>Sign up</u>
+        </div>
       )}
       {signUp && (
-      <div>
-        Already have an account?
-        <u onClick={() => setSignUp(false)}>Sign in</u>
-      </div>
+        <div>
+          Already have an account?
+          {' '}
+          <u onClick={() => setSignUp(false)}>Sign in</u>
+        </div>
       )}
     </div>
   );

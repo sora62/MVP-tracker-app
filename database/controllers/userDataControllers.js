@@ -12,22 +12,32 @@ module.exports = {
         });
         await newUserData.save();
         return res.status(200).send(newUserData);
-      } else if (!searchQuery) {
+      } if (!searchQuery) {
         return res.status(200).send(userData);
-      } else {
-        console.log(searchQuery);
-        // find matching searchQuery in the title of each item of userData.lists
-        const matchingItems = userData.lists.filter(item => item.title.toLocaleLowerCase().includes(searchQuery));
-        return res.status(200).send(matchingItems);
       }
+      // find matching searchQuery in the title of each item of userData.lists
+      const matchingItems = userData.lists.filter((item) => item.title.toLocaleLowerCase()
+        .includes(searchQuery));
+      return res.status(200).send(matchingItems);
     } catch (error) {
       res.status(500).send('Failed to create user');
     }
   },
 
+  getDemoAcc: async (req, res) => {
+    try {
+      const demoAcc = await UserData.findOne({ userId: process.env.DEMOID });
+      res.status(200).send(demoAcc);
+    } catch (error) {
+      res.status(500).send('Failed to login guest');
+    }
+  },
+
   addProblemsToLists: async (req, res) => {
     const { id } = req.params;
-    const { questionid, title, title_slug, level, tag } = req.body;
+    const {
+      questionid, title, title_slug, level, tag,
+    } = req.body;
     try {
       const userData = await UserData.findOne({ userId: id });
       if (userData) {
@@ -45,12 +55,12 @@ module.exports = {
           convertedLevel = 'Hard';
         }
         const newProblem = {
-          questionid: questionid,
-          title: title,
+          questionid,
+          title,
           link: `https://leetcode.com/problems/${title_slug}`,
           checkmark: false,
           difficulty: convertedLevel,
-          tag: tag,
+          tag,
           data: Date.now,
           code: '',
           note: '',
